@@ -1,9 +1,10 @@
+import Navbar from "./Navbar";
 function Hero() {
   return (
     <section className="w-full">
+      <Navbar/>
       {/* 第一段 */}
       <div className="w-full h-[714px] mx-auto bg-[#EFEDD9] flex items-center justify-center">
-        {/* 第一段内容 */}
       </div>
 
       {/* 第二段 */}

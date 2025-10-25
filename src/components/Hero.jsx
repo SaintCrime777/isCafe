@@ -1,5 +1,7 @@
 import Navbar from "./Navbar";
 import Secone from "./Secone";
+import Sectwo from "./Sectwo";
+import Secthree from "./Secthree";
 function Hero() {
   return (
     <section className="w-full">
@@ -11,12 +13,12 @@ function Hero() {
 
       {/* 第二段 */}
       <div className="w-full h-[720px] mx-auto bg-[#FFF0DD] flex items-center justify-center">
-        {/* 第二段内容 */}
+        <Sectwo/>
       </div>
 
       {/* 第三段 */}
       <div className="w-full h-[614px] mx-auto bg-[#EFEDD9] flex items-center justify-center">
-        {/* 第三段内容 */}
+        <Secthree/>
       </div>
     </section>
   );

@@ -47,7 +47,7 @@ function Secone() {
           sip a moment of quiet!
         </h1>
       </div>
-      {/* 底部分隔線 - 在底圖下緣，清晰不模糊 */}
+      {/* 底部線 */}
       <div 
         className="absolute bottom-4 left-5 right-5"
         style={{

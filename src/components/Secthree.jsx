@@ -1,6 +1,6 @@
 function Secthree() {
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-5 flex items-center gap-12">
+    <div id="brand" className="w-full max-w-[1400px] mx-auto px-5 flex items-center gap-12 scroll-mt-[100px]">
       {/* 左側 - 理念圖示 */}
       <div className="relative overflow-hidden w-full max-w-[792px]">
         <img src="/think.webp" alt="品牌理念" className="max-w-full h-auto"

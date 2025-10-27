@@ -1,18 +1,22 @@
-import { useState } from 'react'
-import Hero from './components/Hero'
-import Footer from './components/Footer'
-import Coffee from './components/coffee'
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Coffee from "./components/coffee";
+import Dessert from "./components/Dessert";
+import Footer from "./components/Footer";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
-      <Hero/>
-      <Coffee/>
-      <Footer/>
+      <Navbar />
+      <Hero />
+      <Coffee />
+      <Dessert />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

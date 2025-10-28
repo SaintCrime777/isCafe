@@ -2,43 +2,39 @@ import { Button } from "@/components/ui/button"
 import { Search, ShoppingCart } from "lucide-react"
 import { SiLine } from "react-icons/si"
 
-
 function Navbar() {
   return (
-    // 外層：全寬背景 + sticky
-    <nav className="w-full h-[100px] bg-[#EFEDD9] sticky top-0 z-50">
-      
-      {/* 內容器：限制寬度1400px，居中對齊 */}
-      <div className="max-w-[1400px] h-full mx-auto px-5 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-[#EFEDD9]/95 backdrop-blur supports-[backdrop-filter]:bg-[#EFEDD9]/75">
+      <div className="max-w-[1400px] h-[100px] mx-auto px-5 flex items-center justify-between">
         
         {/* Logo */}
-        <a href="#" className="w-20 h-20 mt-2 border-4 border-[#FFFFFF] rounded-lg shadow-md">
+        <a href="#" className="w-20 h-20 mt-2 border-4 border-white/80 rounded-lg shadow-md backdrop-blur-sm">
           <img src="/logo.png" alt="笑忘咖啡" className="w-full h-full object-contain" />
         </a>
 
-        {/* 跳轉項 */}
-        <div className="flex gap-[75px] mt-2 z-99">
+        {/* 導航 - 保持置中 */}
+        <div className="flex gap-[75px] mt-2">
           <a 
             href="#brand" 
-            className="font-bold text-xl hover:opacity-70 transition-opacity"
+            className="font-bold text-xl hover:opacity-70 transition-opacity text-[#3D3D3D]"
           >
             品牌理念
           </a>
           <a 
             href="#coffee" 
-            className="font-bold text-xl hover:opacity-70 transition-opacity"
+            className="font-bold text-xl hover:opacity-70 transition-opacity text-[#3D3D3D]"
           >
             咖啡飲品
           </a>
           <a 
             href="#dessert" 
-            className="font-bold text-xl hover:opacity-70 transition-opacity"
+            className="font-bold text-xl hover:opacity-70 transition-opacity text-[#3D3D3D]"
           >
             輕食甜點
           </a>
           <a 
             href="#bean" 
-            className="font-bold text-xl hover:opacity-70 transition-opacity"
+            className="font-bold text-xl hover:opacity-70 transition-opacity text-[#3D3D3D]"
           >
             咖啡豆專區
           </a>
@@ -46,19 +42,16 @@ function Navbar() {
 
         {/* 按鈕組 */}
         <div className="flex items-center gap-6 mt-2">
-          {/* 搜尋 */}
           <Button variant="ghost" size="iconLg">
             <Search className="h-8 w-8" />
           </Button>
           
-          {/* 購物車 */}
           <Button variant="ghost" size="iconLg">
             <ShoppingCart className="h-8 w-8" />
           </Button>
 
-          {/* LINE */}
           <Button 
-            className="bg-[#1E943D] hover:bg-[#167A30] text-white rounded-full px-4"
+            className="bg-[#1E943D] hover:bg-[#167A30] text-white rounded-full px-4 shadow-md"
             asChild
           >
             <a 

@@ -45,7 +45,7 @@ const DessertCard = ({
           </h3>
 
           {/* 描述文字 */}
-          <p className="font-['Zen_Maru_Gothic'] font-bold text-xs leading-[150%] tracking-wider text-black line-clamp-3 text-center">
+          <p className="font-['Zen_Maru_Gothic'] font-bold text-sm leading-[150%] tracking-wider text-black line-clamp-3 text-center">
             {description}
           </p>
         </div>

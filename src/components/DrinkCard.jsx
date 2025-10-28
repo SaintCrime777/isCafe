@@ -1,5 +1,5 @@
 // src/components/DrinkCard.jsx
-function DrinkCard({ image, title, price, ingredient, ingredients, isCenter = false }) {
+function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
   // 中间卡片：正常大小，左右卡片：缩小
   const cardWidth = isCenter ? 320 : 260;
   const cardHeight = isCenter ? 680 : 580;

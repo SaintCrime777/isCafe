@@ -1,37 +1,80 @@
-// src/components/Coffee.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DrinkCard from "./DrinkCard";
 
 function Coffee() {
   const [currentIndex, setCurrentIndex] = useState(1);
+  const [cardOffset, setCardOffset] = useState(400); // 動態間距
 
   const products = [
     {
+      id: 1,
       image: "/herbtea.webp",
       title: "笑忘果茶",
       price: "170",
-      ingredient: "有機嚴選花果茶",
+      ingredient: ["有機嚴選花果茶"],
     },
     {
+      id: 2,
       image: "/latte.webp",
       title: "笑忘拿鐵",
       price: "180",
-      ingredients: ["小農鮮乳", "笑忘配方豆"],
+      ingredients: ["笑忘配方豆", "小農鮮乳"],
     },
     {
+      id: 3,
       image: "/americano.webp",
       title: "天天好美式",
       price: "150",
-      ingredient: "笑忘配方豆",
+      ingredient: ["笑忘配方豆"],
+    },
+    {
+      id: 4,
+      image: "/matcha.webp",
+      title: "抹茶拿鐵",
+      price: "200",
+      ingredients: ["小山園抹茶粉", "小農鮮乳"],
+    },
+    {
+      id: 5,
+      image: "/summer.webp",
+      title: "盛夏光年",
+      price: "350",
+      ingredients: ["琴酒", "夏季鮮果"],
+    },
+    {
+      id: 6,
+      image: "/mojito.webp",
+      title: "愛人一杯",
+      price: "350",
+      ingredient: ["經典mojito"],
     },
   ];
 
+  // 響應式調整卡片間距
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setCardOffset(200);  // 手機：小間距
+      } else if (width < 1024) {
+        setCardOffset(300);  // 平板：中間距
+      } else {
+        setCardOffset(400);  // 桌面：大間距
+      }
+    };
+
+    handleResize(); // 初始化
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // 修正後的邏輯（左右互換）
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : products.length - 1));
+    setCurrentIndex((prev) => (prev < products.length - 1 ? prev + 1 : 0));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev < products.length - 1 ? prev + 1 : 0));
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : products.length - 1));
   };
 
   const getVisibleProducts = () => {
@@ -49,9 +92,25 @@ function Coffee() {
 
   const visibleProducts = getVisibleProducts();
 
+  // 使用動態 offset
+  const getTransformX = (position) => {
+    switch (position) {
+      case "left":
+        return -cardOffset;
+      case "center":
+        return 0;
+      case "right":
+        return cardOffset;
+      default:
+        return 0;
+    }
+  };
+
   return (
-    <section id="coffee" className="relative w-full bg-[#FFF0DD] py-20 overflow-x-hidden scroll-mt-[100px]">
-      {/* 主要內容區 */}
+    <section
+      id="coffee"
+      className="relative w-full bg-[#FFF0DD] py-20 overflow-x-hidden scroll-mt-[100px]"
+    >
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-5">
         {/* 標題區 */}
         <div className="flex flex-col items-center mb-12">
@@ -99,18 +158,36 @@ function Coffee() {
             </svg>
           </button>
 
-          {/* 產品卡片容器 */}
-          <div className="flex items-end justify-center gap-12 px-16">
-            {visibleProducts.map((product, idx) => (
-              <DrinkCard
-                key={`${product.id}-${product.position}`}
-                image={product.image}
-                title={product.title}
-                price={product.price}
-                ingredient={product.ingredient}
-                ingredients={product.ingredients}
-                isCenter={product.position === "center"}
-              />
+          {/* 產品卡片容器 - 響應式 */}
+          <div
+            className="relative w-full max-w-[1000px] mx-auto"
+            style={{
+              height: "700px",
+              minHeight: "600px",
+            }}
+          >
+            {visibleProducts.map((product) => (
+              <div
+                key={product.id}
+                className="absolute top-1/2 left-1/2"
+                style={{
+                  transform: `translate(-50%, -50%) translateX(${getTransformX(
+                    product.position
+                  )}px)`,
+                  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                  opacity: product.position === "center" ? 1 : 0.7,
+                  zIndex: product.position === "center" ? 10 : 5,
+                }}
+              >
+                <DrinkCard
+                  image={product.image}
+                  title={product.title}
+                  price={product.price}
+                  ingredient={product.ingredient}
+                  ingredients={product.ingredients}
+                  isCenter={product.position === "center"}
+                />
+              </div>
             ))}
           </div>
 
@@ -151,6 +228,7 @@ function Coffee() {
           </button>
         </div>
       </div>
+
       {/* 底圖 */}
       <div
         className="absolute bottom-0 left-0 w-full pointer-events-none"

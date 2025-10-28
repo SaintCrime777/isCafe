@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Coffee from "./components/coffee";
 import Dessert from "./components/Dessert";
+import Bean from "./components/Bean";
 import Footer from "./components/Footer";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Hero />
       <Coffee />
       <Dessert />
+      <Bean/>
       <Footer />
     </>
   );

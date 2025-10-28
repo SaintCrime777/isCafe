@@ -37,10 +37,10 @@ function Navbar() {
             輕食甜點
           </a>
           <a 
-            href="#beans" 
+            href="#bean" 
             className="font-bold text-xl hover:opacity-70 transition-opacity"
           >
-            經典豆單
+            咖啡豆專區
           </a>
         </div>
 

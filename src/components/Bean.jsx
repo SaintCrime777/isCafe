@@ -204,7 +204,7 @@ function Bean() {
 
               // 加入購物車
               addItem({
-                id: `${selectedProduct.id}-${selectedSize}`, // ID 包含規格
+                id: `bean-${selectedProduct.id}-${selectedSize}`, // ID 包含規格
                 name: `${selectedProduct.name} (${selectedSize})`, // 名稱包含規格
                 price: price,
                 image_url: selectedProduct.image,

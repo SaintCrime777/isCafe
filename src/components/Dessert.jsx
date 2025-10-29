@@ -1,9 +1,11 @@
 import { useState } from "react";
 import DessertCard from "./DessertCard";
+import { useCartStore } from "@/stores/useCartStore";
 
 function Dessert() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedProductIndex, setSelectedProductIndex] = useState(null);
+  const addItem = useCartStore((state) => state.addItem);
 
   const products = [
     {
@@ -64,27 +66,23 @@ function Dessert() {
 
   // 往左選
   const handlePrev = () => {
-    setSelectedIndex((prev) =>
-      prev === 0 ? products.length - 1 : prev - 1
-    );
+    setSelectedIndex((prev) => (prev === 0 ? products.length - 1 : prev - 1));
   };
 
   // 往右選
   const handleNext = () => {
-    setSelectedIndex((prev) =>
-      (prev + 1) % products.length
-    );
+    setSelectedIndex((prev) => (prev + 1) % products.length);
   };
 
-   // 加入清單
-  const handleAddToCart = () => {
-    if (selectedProductIndex === null) {
-      alert('請先選擇一個甜點！');
-      return;
-    }
-    const selectedProduct = products[selectedProductIndex];
-    alert(`已加入：${selectedProduct.title} - $${selectedProduct.price}`);
-  };
+  //  // 加入清單
+  // const handleAddToCart = () => {
+  //   if (selectedProductIndex === null) {
+  //     alert('請先選擇一個甜點！');
+  //     return;
+  //   }
+  //   const selectedProduct = products[selectedProductIndex];
+  //   alert(`已加入：${selectedProduct.title} - $${selectedProduct.price}`);
+  // };
 
   const visibleProducts = getVisibleProducts();
 
@@ -174,7 +172,37 @@ function Dessert() {
         {/* 加入清單按鈕 */}
         <div className="flex justify-center mt-12">
           <button
-            onClick={handleAddToCart}
+            //supabase
+            onClick={() => {
+              // 檢查是否有選中的商品
+              if (selectedProductIndex === null) {
+                alert("請先點選一個甜點！");
+                return;
+              }
+
+              // 取得當前中間顯示的商品
+              const selectedProduct = products[selectedProductIndex];//index 是「找」商品，id 是「認」商品！
+              // console.log('🍰 Dessert addItem 傳入:', {
+              //   id: selectedProduct.id.toString(),
+              //   name: selectedProduct.title,
+              //   // ... 其他欄位
+              // });
+              // 加入購物車
+              addItem({
+                id: `dessert-${selectedProduct.id}`, // 轉成字串
+                name: selectedProduct.title,
+                price: parseInt(selectedProduct.price),
+                image_url: selectedProduct.image,
+                description: selectedProduct.description || " ",
+                quantity: 1,
+              });
+
+              // 提示訊息
+              alert(`${selectedProduct.title} 已加入購物車！`);
+
+              // 清除選取狀態（選擇性）
+              setSelectedProductIndex(null);
+            }}
             className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity"
             style={{
               backgroundColor: "#5A3211",

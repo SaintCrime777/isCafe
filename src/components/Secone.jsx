@@ -53,7 +53,7 @@ function Secone() {
         style={{
           height: '4px',
           backgroundColor: '#EFEDD9',
-          zIndex: 999
+          zIndex: 10
         }}
       />
     </div>

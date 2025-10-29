@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import DrinkCard from "./DrinkCard";
+import { useCartStore } from "@/stores/useCartStore";
 
 function Coffee() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [cardOffset, setCardOffset] = useState(400); // 動態間距
+  const addItem = useCartStore((state) => state.addItem);
 
   const products = [
     {
@@ -55,11 +57,11 @@ function Coffee() {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 640) {
-        setCardOffset(200);  // 手機：小間距
+        setCardOffset(200); // 手機：小間距
       } else if (width < 1024) {
-        setCardOffset(300);  // 平板：中間距
+        setCardOffset(300); // 平板：中間距
       } else {
-        setCardOffset(400);  // 桌面：大間距
+        setCardOffset(400); // 桌面：大間距
       }
     };
 
@@ -214,6 +216,30 @@ function Coffee() {
         {/* 加入清單按鈕 */}
         <div className="flex justify-center mt-12">
           <button
+            //supabase
+            onClick={() => {
+              // 取得當前中間顯示的商品
+              const currentProduct = products[currentIndex];
+              // console.log('🔍 Coffee addItem 傳入:', {
+              //   id: currentProduct.id.toString(),
+              //   name: currentProduct.title,
+              // });
+              // 加入購物車
+              addItem({
+                id: `coffee-${currentProduct.id}`, // 轉成字串
+                name: currentProduct.title,
+                price: parseInt(currentProduct.price),
+                image_url: currentProduct.image,
+                description:
+                  currentProduct.ingredient?.[0] ||
+                  currentProduct.ingredients?.join(", ") ||
+                  "",
+                quantity: 1,
+              });
+
+              // 提示訊息
+              alert(`${currentProduct.title} 已加入購物車！`);
+            }}
             className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity"
             style={{
               backgroundColor: "#5A3211",

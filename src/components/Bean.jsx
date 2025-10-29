@@ -1,9 +1,13 @@
 import { useState } from "react";
 import BeanCard from "./BeanCard";
+import { useCartStore } from "@/stores/useCartStore";
+import { ShoppingCart } from "lucide-react";
 
 function Bean() {
   const [selectedRoast, setSelectedRoast] = useState("all");
   const [selectedProductIndex, setSelectedProductIndex] = useState(null);
+  const [productSizes, setProductSizes] = useState({});
+  const addItem = useCartStore((state) => state.addItem);
 
   // 定義 6 個咖啡豆產品（含各自的價格）
   const products = [
@@ -93,20 +97,18 @@ function Bean() {
       ? products
       : products.filter((p) => p.roast === selectedRoast);
 
-  // 加入清單
-  const handleAddToCart = () => {
-    if (selectedProductIndex === null) {
-      alert("請先選擇一個咖啡豆！");
-      return;
-    }
-    const selectedProduct = filteredProducts[selectedProductIndex];
-    alert(`已加入：${selectedProduct.name} - ${selectedProduct.origin}`);
-  };
-
   // 切換焙度時重置選擇
   const handleRoastChange = (roast) => {
     setSelectedRoast(roast);
     setSelectedProductIndex(null); // 重置選擇
+  };
+
+  // 處理規格變更
+  const handleSizeChange = (productId, size) => {
+    setProductSizes(prev => ({
+      ...prev,
+      [productId]: size
+    }));
   };
 
   return (
@@ -174,6 +176,10 @@ function Bean() {
               <BeanCard
                 product={product}
                 isSelected={index === selectedProductIndex}
+                selectedWeight={productSizes[product.id] || "100g"} 
+                onWeightChange={(weight) =>
+                  handleSizeChange(product.id, weight)
+                } 
               />
             </div>
           ))}
@@ -182,7 +188,35 @@ function Bean() {
         {/* 加入清單按鈕 */}
         <div className="flex justify-center mt-12">
           <button
-            onClick={handleAddToCart}
+            onClick={() => {
+              // 檢查是否有選中商品
+              if (selectedProductIndex === null) {
+                alert("請先點選一個咖啡豆！");
+                return;
+              }
+
+              // 取得選中的商品
+              const selectedProduct = filteredProducts[selectedProductIndex];
+
+              // 取得選中規格的價格
+              const selectedSize = productSizes[selectedProduct.id] || '100g';
+              const price = selectedProduct.prices[selectedSize];
+
+              // 加入購物車
+              addItem({
+                id: `${selectedProduct.id}-${selectedSize}`, // ID 包含規格
+                name: `${selectedProduct.name} (${selectedSize})`, // 名稱包含規格
+                price: price,
+                image_url: selectedProduct.image,
+                description: `${selectedProduct.flavor} | ${selectedProduct.origin} | ${selectedProduct.roast}`,
+              });
+
+              // 提示訊息
+              alert(`${selectedProduct.name} (${selectedSize}) 已加入購物車！`);
+
+              // 清除選取狀態（選擇性）
+              setSelectedProductIndex(null);
+            }}
             className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity"
             style={{
               backgroundColor: "#5A3211",

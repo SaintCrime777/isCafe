@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-const BeanCard = ({ product, isSelected }) => {
-  const [selectedWeight, setSelectedWeight] = useState('100g');
-
+const BeanCard = ({ product, isSelected, selectedWeight, onWeightChange }) => {
+  
   // 取得可用的重量選項（從 product.prices 的 key）
   const availableWeights = Object.keys(product.prices);
 
@@ -56,7 +55,7 @@ const BeanCard = ({ product, isSelected }) => {
             value={selectedWeight}
             onChange={(e) => {
               e.stopPropagation();
-              setSelectedWeight(e.target.value);
+              onWeightChange(e.target.value);
             }}
             className="w-full px-4 py-2 bg-white border-2 border-[#5A3211] rounded-lg appearance-none cursor-pointer font-bold text-black text-center"
             style={{

@@ -45,7 +45,7 @@ const DessertCard = ({
           </h3>
 
           {/* 描述文字 */}
-          <p className="font-['Zen_Maru_Gothic'] font-bold text-sm leading-[150%] tracking-wider text-black line-clamp-3 text-center">
+          <p className="font-['Zen_Maru_Gothic'] font-bold text-sm leading-[150%] tracking-wider text-[#5A3211] line-clamp-3 text-center">
             {description}
           </p>
         </div>
@@ -55,9 +55,9 @@ const DessertCard = ({
           <div className="relative">
             <IoPricetagsOutline className="w-16 h-16 text-[#ED6C30] rotate-45" />
             <span
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[60%] font-['Taprom'] font-normal text-xl text-black"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[60%] font-['Zen_Maru_Gothic'] font-semibold text-xl text-black"
               style={{
-                WebkitTextStroke: "2px #FFFFFF",
+                WebkitTextStroke: "2px #ffffffff",
                 paintOrder: "stroke fill",
               }}
             >

@@ -3,19 +3,25 @@ import ProductCard from "./ProductCard";
 function Sectwo() {
   const products = [
     {
-      image: "/latte.webp",
-      title: "笑忘拿鐵",
-      description: "我有咖啡，你有故事\n共情笑忘香醇天然地",
+      id:1,
+      image: "/wagashi.webp",
+      title: "和菓笑忘",
+      description: "和我們一起笑忘閒聊風花雪月!",
+      price: 230,
     },
     {
-      image: "/tisu.webp",
-      title: "笑忘提蘇",
-      description: "沒有慾望煩惱是\n一口甜蜜法消化的，\n如果有就兩口！",
+      id:2,
+      image: "/sun.webp",
+      title: "笑忘金烏",
+      description: "金烏不獨，難以耀群星。將進酒，不將就!",
+      price: 265,
     },
     {
-      image: "/herbtea.webp",
-      title: "笑忘果茶",
-      description: "蘊含天地萬本精華，\n飲下一杯，舒緩情緒\n恢復元氣！",
+      id:3,
+      image: "/pasta.webp",
+      title: "笑忘Pasta",
+      description: "來點pasta，卡關都all pass！",
+      price: 330,
     },
   ];
 
@@ -50,12 +56,10 @@ function Sectwo() {
 
       {/* 產品卡片區 */}
       <div className="flex justify-center gap-8">
-        {products.map((product, index) => (
+        {products.map((product) => (
           <ProductCard
-            key={index}
-            image={product.image}
-            title={product.title}
-            description={product.description}
+            key={product.id}
+            product={product}
           />
         ))}
       </div>

@@ -62,6 +62,7 @@ function ProductCard({ product, buttonText = "加入清單" }) {
             fontFamily: "'Inter', sans-serif",
             fontSize: "16px",
             color: "#FFFFFF",
+            letterSpacing: "0.1em",
           }}
           onClick={() => {
             // 加入購物車

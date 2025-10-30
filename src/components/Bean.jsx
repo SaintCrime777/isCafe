@@ -133,7 +133,7 @@ function Bean() {
               fontFamily: "'Zen Maru Gothic', sans-serif",
               fontSize: "36px",
               color: "#000000",
-              letterSpacing: "0.15em",
+              letterSpacing: "0.25em",
               WebkitTextStroke: "5px #FFFFFF",
               paintOrder: "stroke fill",
             }}

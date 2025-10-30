@@ -11,7 +11,10 @@ export const useAuthStore = create(
       login: (userData) => set({ user: userData }),
       
       // 登出
-      logout: () => set({ user: null }),
+       logout: () => {
+        set({ user: null });
+        localStorage.removeItem('auth-storage');
+        },
       
       // 檢查是否已登入
       isAuthenticated: () => {

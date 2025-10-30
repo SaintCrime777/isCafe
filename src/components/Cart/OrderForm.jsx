@@ -131,9 +131,10 @@ export default function OrderForm({
         {/* 配送地址（外帶才顯示） */}
         {orderData.orderType === "takeout" && (
           <div className="space-y-2">
-            <label className="text-sm font-medium">配送地址（選填）</label>
+            <label className="text-sm font-medium">配送地址<span className="text-red-500">*</span></label>
             <input
               type="text"
+              required
               value={orderData.address}
               onChange={(e) =>
                 setOrderData({ ...orderData, address: e.target.value })
@@ -146,15 +147,23 @@ export default function OrderForm({
 
         {/* 電話 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">聯絡電話（選填）</label>
+          <label className="text-sm font-medium">聯絡電話
+            {orderData.orderType ==="takeout" &&(
+            <span className="text-red-500">*</span>)}
+            </label>
           <input
             type="tel"
+            required={orderData.orderType==="takeout"}
             value={orderData.phone}
             onChange={(e) =>
               setOrderData({ ...orderData, phone: e.target.value })
             }
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="0912-345-678"
+            placeholder={
+                orderData.orderType === "takeout"
+                ?"請輸入電話"
+                :"選填(集點用)"
+            }
           />
         </div>
 

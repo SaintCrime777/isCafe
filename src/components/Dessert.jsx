@@ -1,59 +1,46 @@
-import { useState } from "react";
+// src/components/Dessert.jsx
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import DessertCard from "./DessertCard";
 import { useCartStore } from "@/stores/useCartStore";
 
 function Dessert() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedProductIndex, setSelectedProductIndex] = useState(null);
+  const [products, setProducts] = useState([]); // ✅ 改成動態資料
+  const [loading, setLoading] = useState(true); // ✅ 加上 loading
   const addItem = useCartStore((state) => state.addItem);
 
-  const products = [
-    {
-      id: 1,
-      image: "/tisu.webp",
-      title: "笑忘提酥",
-      description: "沒有慾望煩惱是一口甜蜜法消化的，如果有就兩口！",
-      price: "220",
-    },
-    {
-      id: 2,
-      image: "/brownie.webp",
-      title: "阿布朗尼想",
-      description: "濃郁瑞士蓮巧克力，外酥內軟的口感，幸福！",
-      price: "150",
-    },
-    {
-      id: 3,
-      image: "/basque.webp",
-      title: "焦糖巴斯克",
-      description: "入口即化，淡淡奶香，一口咬下，人生無他",
-      price: "175",
-    },
-    {
-      id: 4,
-      image: "/canele.webp",
-      title: "可可麗露",
-      description: "雙倍的天使之鈴交響樂",
-      price: "90",
-    },
-    {
-      id: 5,
-      image: "/crepe.webp",
-      title: "可可麗餅",
-      description: "C'est parfait!",
-      price: "220",
-    },
-    {
-      id: 6,
-      image: "/cookie.webp",
-      title: "心太軟餅乾",
-      description: "還不趕緊帶走送給心儀的對象",
-      price: "120",
-    },
-  ];
+  // ✅ 從 Supabase 抓取甜點商品
+  useEffect(() => {
+    const fetchDesserts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('category', 'dessert')  // ✅ 只抓甜點類
+          .order('created_at', { ascending: true });
+
+        if (error) {
+          console.error('❌ 抓取甜點商品失敗:', error);
+        } else {
+          console.log('✅ 從 Supabase 抓到的甜點:', data);
+          setProducts(data || []);
+        }
+      } catch (error) {
+        console.error('❌ 發生錯誤:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDesserts();
+  }, []);
 
   // 計算要顯示的 4 張卡片（循環顯示）
   const getVisibleProducts = () => {
+    if (products.length === 0) return [];
+    
     const visible = [];
     for (let i = 0; i < 4; i++) {
       visible.push({
@@ -74,17 +61,35 @@ function Dessert() {
     setSelectedIndex((prev) => (prev + 1) % products.length);
   };
 
-  //  // 加入清單
-  // const handleAddToCart = () => {
-  //   if (selectedProductIndex === null) {
-  //     alert('請先選擇一個甜點！');
-  //     return;
-  //   }
-  //   const selectedProduct = products[selectedProductIndex];
-  //   alert(`已加入：${selectedProduct.title} - $${selectedProduct.price}`);
-  // };
-
   const visibleProducts = getVisibleProducts();
+
+  // ✅ Loading 狀態
+  if (loading) {
+    return (
+      <section
+        id="dessert"
+        className="relative w-full bg-[#EFEDD9] py-20 overflow-x-hidden scroll-mt-[100px]"
+      >
+        <div className="flex justify-center items-center py-20">
+          <p className="text-lg text-gray-500">載入甜點商品中...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // ✅ 無商品狀態
+  if (products.length === 0) {
+    return (
+      <section
+        id="dessert"
+        className="relative w-full bg-[#EFEDD9] py-20 overflow-x-hidden scroll-mt-[100px]"
+      >
+        <div className="flex justify-center items-center py-20">
+          <p className="text-lg text-gray-500">目前沒有甜點商品</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -141,10 +146,7 @@ function Dessert() {
             {visibleProducts.map((product) => (
               <DessertCard
                 key={product.id}
-                image={product.image}
-                title={product.title}
-                description={product.description}
-                price={product.price}
+                product={product}  // ✅ 傳整個 product 物件
                 isSelected={product.index === selectedProductIndex}
                 onClick={() => setSelectedProductIndex(product.index)}
               />
@@ -172,7 +174,6 @@ function Dessert() {
         {/* 加入清單按鈕 */}
         <div className="flex justify-center mt-12">
           <button
-            //supabase
             onClick={() => {
               // 檢查是否有選中的商品
               if (selectedProductIndex === null) {
@@ -180,27 +181,20 @@ function Dessert() {
                 return;
               }
 
-              // 取得當前中間顯示的商品
-              const selectedProduct = products[selectedProductIndex];//index 是「找」商品，id 是「認」商品！
-              // console.log('🍰 Dessert addItem 傳入:', {
-              //   id: selectedProduct.id.toString(),
-              //   name: selectedProduct.title,
-              //   // ... 其他欄位
-              // });
-              // 加入購物車
+              // 取得選中的商品
+              const selectedProduct = products[selectedProductIndex];
+
+              // ✅ 使用正確的欄位名稱
               addItem({
-                id: `dessert-${selectedProduct.id}`, // 轉成字串
-                name: selectedProduct.title,
-                price: parseInt(selectedProduct.price),
-                image_url: selectedProduct.image,
-                description: selectedProduct.description || " ",
+                id: selectedProduct.id,  // ✅ 直接用 UUID
+                name: selectedProduct.name,  // ✅ 不是 title
+                price: selectedProduct.price,  // ✅ 已經是數字
+                image_url: selectedProduct.image_url,  // ✅ 不是 image
+                description: selectedProduct.description || "",
                 quantity: 1,
               });
 
-              // 提示訊息
-              alert(`${selectedProduct.title} 已加入購物車！`);
-
-              // 清除選取狀態（選擇性）
+              alert(`${selectedProduct.name} 已加入購物車！`);
               setSelectedProductIndex(null);
             }}
             className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity"

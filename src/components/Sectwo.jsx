@@ -1,29 +1,48 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import ProductCard from "./ProductCard";
 
-function Sectwo() {
-  const products = [
-    {
-      id:1,
-      image: "/wagashi.webp",
-      title: "和菓笑忘",
-      description: "和我們一起笑忘閒聊風花雪月!",
-      price: 230,
-    },
-    {
-      id:2,
-      image: "/sun.webp",
-      title: "笑忘金烏",
-      description: "金烏不獨，難以耀群星。將進酒，不將就!",
-      price: 265,
-    },
-    {
-      id:3,
-      image: "/pasta.webp",
-      title: "笑忘Pasta",
-      description: "來點pasta，卡關都all pass！",
-      price: 330,
-    },
-  ];
+function Sectwo(){
+const [products, setProducts] = useState([]);
+const [loading, setLoading] = useState(true);
+
+ // ✅ 從 Supabase 抓取首頁精選商品
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('category', 'featured') //限定推薦商品
+          .order('created_at', { ascending: true })
+          .limit(3);  
+
+        if (error) {
+          console.error('❌ 抓取商品失敗:', error);
+        } else {
+          console.log('✅ 從 Supabase 抓到的商品:', data);
+          setProducts(data || []);
+        }
+      } catch (error) {
+        console.error('❌ 發生錯誤:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+// ✅ Loading 狀態
+  if (loading) {
+    return (
+      <div className="w-full max-w-[1400px] mx-auto px-5 py-20">
+        <div className="flex justify-center items-center">
+          <p className="text-lg text-gray-500">載入商品中...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-5">

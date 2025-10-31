@@ -1,6 +1,5 @@
 // src/components/DrinkCard.jsx
-function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
-  // 中间卡片：正常大小，左右卡片：缩小
+function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
   const cardWidth = isCenter ? 320 : 260;
   const cardHeight = isCenter ? 680 : 580;
   const scale = isCenter ? 1 : 0.81;
@@ -14,7 +13,7 @@ function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
         transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
-      {/* 襯底灰色 - 在底圖右上角偏移 */}
+      {/* 襯底灰色 */}
       {isCenter && (
         <div
           className="absolute"
@@ -53,8 +52,8 @@ function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
             }}
           >
             <img
-              src={image}
-              alt={title}
+              src={product.image_url}  
+              alt={product.name}  
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.target.src = 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop';
@@ -86,7 +85,7 @@ function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
               textShadow: '2px 2px 0px #FFFFFF, -2px -2px 0px #FFFFFF, 2px -2px 0px #FFFFFF, -2px 2px 0px #FFFFFF'
             }}
           >
-            {title}
+            {product.name}  {/* ✅ 改用 name */}
           </h3>
 
           {/* 價格 */}
@@ -100,7 +99,7 @@ function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
               fontStyle: 'italic'
             }}
           >
-            {price}
+            {product.price}  {/* ✅ 改用 price（已經是數字） */}
           </p>
 
           {/* 下方分隔線 */}
@@ -115,51 +114,17 @@ function DrinkCard({ image, title, price, ingredient, ingredients, isCenter}) {
 
           {/* 成分說明 */}
           <div className="text-center pt-6">
-            {ingredient ? (
-              <p
-                className="font-bold"
-                style={{
-                  fontFamily: "'Zen Maru Gothic', sans-serif",
-                  fontSize: `${isCenter ? '16px' : '14px'}`,
-                  color: '#000000',
-                  letterSpacing: '0.2em'
-                }}
-              >
-                {ingredient}
-              </p>
-            ) : ingredients ? (
-              <div
-                className="font-bold flex flex-col items-center"
-                style={{
-                  fontFamily: "'Zen Maru Gothic', sans-serif",
-                  fontSize: `${isCenter ? '16px' : '14px'}`,
-                  color: '#000000',
-                  letterSpacing: '0.2em'
-                }}
-              >
-                <p>{ingredients[0]}</p>
-                
-                {/* 橙色方形加號 */}
-                <div 
-                  className="flex items-center justify-center my-2"
-                  >
-                  <span 
-                    style={{
-                      color: '#ED6C30',
-                      fontSize: '18px',
-                      fontWeight: 'bold',
-                      lineHeight: 1,
-                      WebkitTextStroke:'1.5px #ED6C30',
-                      paintOrder:'stroke fill'
-                    }}
-                  >
-                    +
-                  </span>
-                </div>
-                
-                <p>{ingredients[1]}</p>
-              </div>
-            ) : null}
+            <p
+              className="font-bold"
+              style={{
+                fontFamily: "'Zen Maru Gothic', sans-serif",
+                fontSize: `${isCenter ? '16px' : '14px'}`,
+                color: '#000000',
+                letterSpacing: '0.2em'
+              }}
+            >
+              {product.description}  {/* ✅ 改用 description */}
+            </p>
           </div>
         </div>
       </div>

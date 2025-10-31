@@ -1,71 +1,56 @@
+// src/components/Coffee.jsx
 import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import DrinkCard from "./DrinkCard";
 import { useCartStore } from "@/stores/useCartStore";
 
 function Coffee() {
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [cardOffset, setCardOffset] = useState(400); // 動態間距
+  const [cardOffset, setCardOffset] = useState(400);
+  const [products, setProducts] = useState([]); // ✅ 改成動態資料
+  const [loading, setLoading] = useState(true); // ✅ 加上 loading
   const addItem = useCartStore((state) => state.addItem);
 
-  const products = [
-    {
-      id: 1,
-      image: "/herbtea.webp",
-      title: "笑忘果茶",
-      price: "170",
-      ingredient: ["有機嚴選花果茶"],
-    },
-    {
-      id: 2,
-      image: "/latte.webp",
-      title: "笑忘拿鐵",
-      price: "180",
-      ingredients: ["笑忘配方豆", "小農鮮乳"],
-    },
-    {
-      id: 3,
-      image: "/americano.webp",
-      title: "天天好美式",
-      price: "150",
-      ingredient: ["笑忘配方豆"],
-    },
-    {
-      id: 4,
-      image: "/matcha.webp",
-      title: "抹茶拿鐵",
-      price: "200",
-      ingredients: ["小山園抹茶粉", "小農鮮乳"],
-    },
-    {
-      id: 5,
-      image: "/summer.webp",
-      title: "盛夏光年",
-      price: "350",
-      ingredients: ["琴酒", "夏季鮮果"],
-    },
-    {
-      id: 6,
-      image: "/mojito.webp",
-      title: "愛人一杯",
-      price: "350",
-      ingredient: ["經典mojito"],
-    },
-  ];
+  // ✅ 從 Supabase 抓取咖啡商品
+  useEffect(() => {
+    const fetchCoffee = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('category', 'coffee')  // ✅ 只抓咖啡類
+          .order('created_at', { ascending: true });
+
+        if (error) {
+          console.error('❌ 抓取咖啡商品失敗:', error);
+        } else {
+          console.log('✅ 從 Supabase 抓到的咖啡:', data);
+          setProducts(data || []);
+        }
+      } catch (error) {
+        console.error('❌ 發生錯誤:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCoffee();
+  }, []);
 
   // 響應式調整卡片間距
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 640) {
-        setCardOffset(200); // 手機：小間距
+        setCardOffset(200);
       } else if (width < 1024) {
-        setCardOffset(300); // 平板：中間距
+        setCardOffset(300);
       } else {
-        setCardOffset(400); // 桌面：大間距
+        setCardOffset(400);
       }
     };
 
-    handleResize(); // 初始化
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -80,6 +65,8 @@ function Coffee() {
   };
 
   const getVisibleProducts = () => {
+    if (products.length === 0) return [];
+    
     const prevIndex =
       currentIndex === 0 ? products.length - 1 : currentIndex - 1;
     const nextIndex =
@@ -94,7 +81,6 @@ function Coffee() {
 
   const visibleProducts = getVisibleProducts();
 
-  // 使用動態 offset
   const getTransformX = (position) => {
     switch (position) {
       case "left":
@@ -107,6 +93,34 @@ function Coffee() {
         return 0;
     }
   };
+
+  // ✅ Loading 狀態
+  if (loading) {
+    return (
+      <section
+        id="coffee"
+        className="relative w-full bg-[#FFF0DD] py-20 overflow-x-hidden scroll-mt-[100px]"
+      >
+        <div className="flex justify-center items-center py-20">
+          <p className="text-lg text-gray-500">載入咖啡商品中...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // ✅ 無商品狀態
+  if (products.length === 0) {
+    return (
+      <section
+        id="coffee"
+        className="relative w-full bg-[#FFF0DD] py-20 overflow-x-hidden scroll-mt-[100px]"
+      >
+        <div className="flex justify-center items-center py-20">
+          <p className="text-lg text-gray-500">目前沒有咖啡商品</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -160,7 +174,7 @@ function Coffee() {
             </svg>
           </button>
 
-          {/* 產品卡片容器 - 響應式 */}
+          {/* 產品卡片容器 */}
           <div
             className="relative w-full max-w-[1000px] mx-auto"
             style={{
@@ -182,11 +196,7 @@ function Coffee() {
                 }}
               >
                 <DrinkCard
-                  image={product.image}
-                  title={product.title}
-                  price={product.price}
-                  ingredient={product.ingredient}
-                  ingredients={product.ingredients}
+                  product={product}  // ✅ 直接傳整個 product
                   isCenter={product.position === "center"}
                 />
               </div>
@@ -216,29 +226,20 @@ function Coffee() {
         {/* 加入清單按鈕 */}
         <div className="flex justify-center mt-12">
           <button
-            //supabase
             onClick={() => {
-              // 取得當前中間顯示的商品
               const currentProduct = products[currentIndex];
-              // console.log('🔍 Coffee addItem 傳入:', {
-              //   id: currentProduct.id.toString(),
-              //   name: currentProduct.title,
-              // });
-              // 加入購物車
+              
+              // ✅ 使用正確的欄位名稱
               addItem({
-                id: `coffee-${currentProduct.id}`, // 轉成字串
-                name: currentProduct.title,
-                price: parseInt(currentProduct.price),
-                image_url: currentProduct.image,
-                description:
-                  currentProduct.ingredient?.[0] ||
-                  currentProduct.ingredients?.join(", ") ||
-                  "",
+                id: currentProduct.id,  // ✅ 直接用 UUID
+                name: currentProduct.name,  // ✅ 不是 title
+                price: currentProduct.price,  // ✅ 已經是數字
+                image_url: currentProduct.image_url,  // ✅ 不是 image
+                description: currentProduct.description || '',
                 quantity: 1,
               });
 
-              // 提示訊息
-              alert(`${currentProduct.title} 已加入購物車！`);
+              alert(`${currentProduct.name} 已加入購物車！`);
             }}
             className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity"
             style={{

@@ -15,7 +15,7 @@ function ProductCard({ product, buttonText = "加入清單" }) {
       <div
         className="w-full h-[250px] bg-cover bg-center"
         style={{
-          backgroundImage: `url(${product.image})`,
+          backgroundImage: `url(${product.image_url})`,
           borderTopLeftRadius: "20px",
           borderTopRightRadius: "20px",
         }}
@@ -36,7 +36,7 @@ function ProductCard({ product, buttonText = "加入清單" }) {
             paintOrder: "stroke fill",
           }}
         >
-          {product.title}
+          {product.name}
         </h3>
 
         {/* 描述 */}
@@ -67,14 +67,14 @@ function ProductCard({ product, buttonText = "加入清單" }) {
           onClick={() => {
             // 加入購物車
             addItem({
-              id: product.id.toString(), // 轉成字串
-              name: product.title,
+              id: product.id,
+              name: product.name,
               price:product.price,
-              image_url: product.image,
+              image_url: product.image_url,
               description:
               product.description || '',
             });
-            alert(`${product.title} 已加入購物車！`);
+            alert(`${product.name} 已加入購物車！`);
           }}
         >
           {buttonText}

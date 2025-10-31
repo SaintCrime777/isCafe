@@ -23,6 +23,18 @@ export default function OrderForm({
       return;
     }
 
+    // ✅ 新增：外帶的驗證
+    if (orderData.orderType === "takeout") {
+      if (!orderData.phone.trim()) {
+        toast.error("外帶請輸入聯絡電話");
+        return;
+      }
+      if (!orderData.paymentMethod) {
+        toast.error("請選擇付款方式");
+        return;
+      }
+    }
+
     // 驗證通過，呼叫父組件的 onSubmit
     onSubmit();
   };
@@ -131,7 +143,9 @@ export default function OrderForm({
         {/* 配送地址（外帶才顯示） */}
         {orderData.orderType === "takeout" && (
           <div className="space-y-2">
-            <label className="text-sm font-medium">配送地址<span className="text-red-500">*</span></label>
+            <label className="text-sm font-medium">
+              配送地址<span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               required
@@ -140,32 +154,105 @@ export default function OrderForm({
                 setOrderData({ ...orderData, address: e.target.value })
               }
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="請輸入配送地址（外帶自取可不填）"
+              placeholder="請輸入配送地址（外帶自取請填自取）"
             />
           </div>
         )}
 
         {/* 電話 */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">聯絡電話
-            {orderData.orderType ==="takeout" &&(
-            <span className="text-red-500">*</span>)}
-            </label>
+          <label className="text-sm font-medium">
+            聯絡電話
+            {orderData.orderType === "takeout" && (
+              <span className="text-red-500">*</span>
+            )}
+          </label>
           <input
             type="tel"
-            required={orderData.orderType==="takeout"}
+            required={orderData.orderType === "takeout"}
             value={orderData.phone}
             onChange={(e) =>
               setOrderData({ ...orderData, phone: e.target.value })
             }
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder={
-                orderData.orderType === "takeout"
-                ?"請輸入電話"
-                :"選填(集點用)"
+              orderData.orderType === "takeout" ? "請輸入電話" : "選填(集點用)"
             }
           />
         </div>
+
+        {/* ✅ 新增：付款方式（外帶才顯示） */}
+        {orderData.orderType === "takeout" && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              付款方式 <span className="text-red-500">*</span>
+            </label>
+
+            {/* 說明文字 */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+              <p className="text-xs text-blue-700 flex items-center gap-2">
+                <span>💡</span>
+                <span>展示版本｜實際上線將串接綠界/街口支付/PayPal等線上金流</span>
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <label
+                className={`
+                  flex items-center justify-center gap-2 p-4 border-2 rounded-lg cursor-pointer transition-all
+                  ${
+                    orderData.paymentMethod === "cash"
+                      ? "border-primary bg-primary/5"
+                      : "border-gray-200 hover:border-gray-300"
+                  }
+                `}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cash"
+                  checked={orderData.paymentMethod === "cash"}
+                  onChange={(e) =>
+                    setOrderData({
+                      ...orderData,
+                      paymentMethod: e.target.value,
+                    })
+                  }
+                  className="sr-only"
+                />
+                <span className="text-2xl">💵</span>
+                <span className="font-medium">現金</span>
+              </label>
+
+              <label
+                className={`
+                  flex items-center justify-center gap-2 p-4 border-2 rounded-lg cursor-pointer transition-all
+                  ${
+                    orderData.paymentMethod === "card"
+                      ? "border-primary bg-primary/5"
+                      : "border-gray-200 hover:border-gray-300"
+                  }
+                `}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="card"
+                  checked={orderData.paymentMethod === "card"}
+                  onChange={(e) =>
+                    setOrderData({
+                      ...orderData,
+                      paymentMethod: e.target.value,
+                    })
+                  }
+                  className="sr-only"
+                />
+                <span className="text-2xl">💳</span>
+                <span className="font-medium">信用卡</span>
+              </label>
+            </div>
+          </div>
+        )}
 
         {/* 備註 */}
         <div className="space-y-2">

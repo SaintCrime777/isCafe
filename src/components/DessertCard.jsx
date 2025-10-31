@@ -1,11 +1,9 @@
+// src/components/DessertCard.jsx
 import React from "react";
 import { IoPricetagsOutline } from "react-icons/io5";
 
 const DessertCard = ({
-  image,
-  title,
-  description,
-  price,
+  product,  // ✅ 改成接收 product 物件
   isSelected = false,
   onClick,
 }) => {
@@ -41,19 +39,19 @@ const DessertCard = ({
               paintOrder: "stroke fill",
             }}
           >
-            {title}
+            {product.name} 
           </h3>
 
           {/* 描述文字 */}
           <p className="font-['Zen_Maru_Gothic'] font-bold text-sm leading-[150%] tracking-wider text-[#5A3211] line-clamp-3 text-center">
-            {description}
+            {product.description}  
           </p>
         </div>
 
         {/* 價格標籤 */}
         <div className="absolute bottom-2 right-4 flex items-center">
           <div className="relative">
-            <IoPricetagsOutline className="w-16 h-16 text-[#ED6C30] rotate-45" />
+            <IoPricetagsOutline className="mt-1 w-16 h-16 text-[#ED6C30] rotate-45" />
             <span
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[60%] font-['Zen_Maru_Gothic'] font-semibold text-xl text-black"
               style={{
@@ -61,7 +59,7 @@ const DessertCard = ({
                 paintOrder: "stroke fill",
               }}
             >
-              {price}
+              {product.price}  
             </span>
           </div>
         </div>
@@ -70,7 +68,11 @@ const DessertCard = ({
       {/* 上半部 - 圓形圖片區 */}
       <div className="relative flex justify-center pt-4 z-20">
         <div className="w-[200px] h-[200px] rounded-full overflow-hidden border-[3px] border-white transition-all duration-300">
-          <img src={image} alt={title} className="w-full h-full object-cover" />
+          <img 
+            src={product.image_url}  
+            alt={product.name} 
+            className="w-full h-full object-cover" 
+          />
         </div>
       </div>
     </div>

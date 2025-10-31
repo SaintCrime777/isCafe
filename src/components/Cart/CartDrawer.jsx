@@ -13,17 +13,18 @@ import OrderForm from "./OrderForm";
 import OrderSuccess from "./OrderSuccess";
 
 export default function CartDrawer() {
-  const { getTotalItems, getTotal, clearCart } = useCartStore(); // ✅ 加上 getTotal 和 clearCart
+  const { getTotalItems, getTotal, clearCart, createOrder, items } = useCartStore(); // ✅ 加上 createOrder 和 items
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [drawerStep, setDrawerStep] = useState("cart");
-  const [orderNumber, setOrderNumber] = useState(null); // ✅ 加上訂單編號
+  const [orderNumber, setOrderNumber] = useState(null);
   const [orderData, setOrderData] = useState({
     name: "",
     orderType: "dine-in",
     tableNumber: "",
     phone: "",
     address: "",
+    paymentMethod: "cash",
     notes: "",
   });
 
@@ -41,10 +42,9 @@ export default function CartDrawer() {
     }
   }, [user]);
 
-  // ✅ 當 Drawer 關閉時，重置步驟到購物車
+  // 當 Drawer 關閉時，重置步驟到購物車
   useEffect(() => {
     if (!isOpen) {
-      // Drawer 關閉後 500ms 再重置，避免看到切換動畫
       const timer = setTimeout(() => {
         setDrawerStep('cart');
       }, 500);
@@ -52,30 +52,38 @@ export default function CartDrawer() {
     }
   }, [isOpen]);
 
-  // ✅ 生成訂單編號
-  const generateOrderNumber = () => {
-    const date = new Date();
-    const dateStr = date.toISOString().slice(0,10).replace(/-/g, '');
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    return `${dateStr}${random}`;
-  };
+  // ✅ 送出訂單的函數（修正版）
+  const handleSubmitOrder = async () => {
+    try {
+      console.log('🚀 開始建立訂單...');
+      console.log('📦 訂單資料:', orderData);
+      console.log('🛒 購物車商品:', items);
+      console.log('👤 用戶資料:', user);
 
-  // ✅ 送出訂單的函數
-  const handleSubmitOrder = () => {
-    const newOrderNumber = generateOrderNumber();
-    
-    // TODO: 之後會連接 Supabase
-    console.log('📦 訂單資料:', {
-      orderNumber: newOrderNumber,
-      user_id: user.id,
-      ...orderData,
-      total: getTotal(),
-    });
-    
-    setOrderNumber(newOrderNumber);
-    clearCart(); // ✅ 送出訂單後立刻清空購物車
-    toast.success('訂單送出成功！');
-    setDrawerStep('success');
+      // ✅ 真正呼叫 createOrder
+      const result = await createOrder({
+        customerName: orderData.name,
+        phone: orderData.phone,
+        orderType: orderData.orderType,
+        tableNumber: orderData.orderType === 'dine-in' ? orderData.tableNumber : null,
+        address: orderData.orderType === 'takeout' ? orderData.address : null,
+        paymentMethod: orderData.orderType === 'takeout' ? orderData.paymentMethod : null,
+        notes: orderData.notes,
+      });
+
+      console.log('📊 建立訂單結果:', result);
+
+      if (result.success) {
+        setOrderNumber(result.orderNumber);
+        toast.success('訂單送出成功！');
+        setDrawerStep('success');
+      } else {
+        toast.error(`建立訂單失敗：${result.error}`);
+      }
+    } catch (error) {
+      console.error('❌ 送出訂單時發生錯誤:', error);
+      toast.error('送出訂單時發生錯誤');
+    }
   };
 
   return (
@@ -121,7 +129,7 @@ export default function CartDrawer() {
             orderData={orderData}
             setOrderData={setOrderData}
             onBack={() => setDrawerStep("cart")}
-            onSubmit={handleSubmitOrder} // ✅ 改成呼叫 handleSubmitOrder
+            onSubmit={handleSubmitOrder}
           />
         )}
 
@@ -129,8 +137,8 @@ export default function CartDrawer() {
           <OrderSuccess 
             orderNumber={orderNumber}
             onClose={() => {
-              setIsOpen(false); // ✅ 關閉 Drawer
-              window.scrollTo({ top: 0, behavior: 'smooth' }); // 滾動到頂部
+              setIsOpen(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
         )}

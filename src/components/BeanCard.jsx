@@ -1,9 +1,10 @@
+// src/components/BeanCard.jsx
 import { useState } from 'react';
 
 const BeanCard = ({ product, isSelected, selectedWeight, onWeightChange }) => {
   
-  // 取得可用的重量選項（從 product.prices 的 key）
-  const availableWeights = Object.keys(product.prices);
+  // ✅ 從 product.prices (JSON) 取得可用的重量選項
+  const availableWeights = product.prices ? Object.keys(product.prices) : ['100g'];
 
   return (
     <div 
@@ -18,8 +19,8 @@ const BeanCard = ({ product, isSelected, selectedWeight, onWeightChange }) => {
       {/* 圖片區域 */}
       <div className="relative h-[200px] bg-[#4A4A4A] overflow-hidden">
         <img 
-          src={product.image}
-          alt={product.name}
+          src={product.image_url} 
+          alt={product.name}  
           className="w-full h-full object-cover"
         />
       </div>
@@ -35,7 +36,7 @@ const BeanCard = ({ product, isSelected, selectedWeight, onWeightChange }) => {
             paintOrder: "stroke fill"
           }}
         >
-          {product.name}
+          {product.name} 
         </h3>
 
         {/* 風味描述 */}
@@ -46,7 +47,7 @@ const BeanCard = ({ product, isSelected, selectedWeight, onWeightChange }) => {
             letterSpacing: "0.05em"
           }}
         >
-          風味：{product.flavor}
+          {product.description} 
         </p>
 
         {/* 重量選擇下拉 */}
@@ -85,19 +86,21 @@ const BeanCard = ({ product, isSelected, selectedWeight, onWeightChange }) => {
               fontFamily: "'Zen Maru Gothic', sans-serif"
             }}
           >
-            NT$ {product.prices[selectedWeight]}
+            NT$ {product.prices?.[selectedWeight] || product.price}  
           </span>
         </div>
 
-        {/* 產地 */}
-        <p 
-          className="text-right text-sm font-bold text-black"
-          style={{
-            fontFamily: "'Zen Maru Gothic', sans-serif"
-          }}
-        >
-          產地 - {product.origin}
-        </p>
+        {/* 產地（如果有的話） */}
+        {product.origin && (
+          <p 
+            className="text-right text-sm font-bold text-black"
+            style={{
+              fontFamily: "'Zen Maru Gothic', sans-serif"
+            }}
+          >
+            產地 - {product.origin}
+          </p>
+        )}
       </div>
     </div>
   );

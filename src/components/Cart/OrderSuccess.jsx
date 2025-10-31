@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import OrderDetailDialog from "./OrderDetailDialog";
 
 export default function OrderSuccess({ orderNumber, onClose }) {
+  const [showDetail, setShowDetail] = useState(false);
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 p-8">
       <div className="text-6xl">🎉</div>
@@ -21,16 +24,21 @@ export default function OrderSuccess({ orderNumber, onClose }) {
           繼續點餐
         </Button>
 
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => {
-            // TODO: 之後可以跳轉到訂單詳情頁
-            alert("訂單詳情功能開發中...");
-          }}
+        <button
+          onClick={() => setShowDetail(true)}
+          className="w-full py-3 bg-white border-2 border-primary text-primary font-bold rounded-lg hover:bg-primary/5 transition-colors"
         >
           查看訂單詳情
-        </Button>
+        </button>
+        
+        {/* ✅ 訂單詳情 Dialog */}
+        {showDetail && (
+          <OrderDetailDialog
+            orderNumber={orderNumber}
+            isOpen={showDetail}
+            onClose={() => setShowDetail(false)}
+          />
+        )}
       </div>
     </div>
   );

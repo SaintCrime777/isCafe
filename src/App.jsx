@@ -1,7 +1,7 @@
 import { useState,useEffect  } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import Coffee from "./components/coffee";
+import Coffee from "./components/Coffee";
 import Dessert from "./components/Dessert";
 import Bean from "./components/Bean";
 import Footer from "./components/Footer";

@@ -39,12 +39,11 @@ function Bean() {
   }, []);
 
   // 根據焙度篩選產品
-  // ⚠️ 注意：這裡假設資料庫中有 roast 欄位或在 description 中
-  // 如果沒有，可能需要調整篩選邏輯
+  // ⚠️ 注意：資料庫欄位有無焙度
   const filteredProducts = products.filter((p) => {
     if (selectedRoast === "all") return true;
     // 假設 roast 資訊在 description 中，或者有獨立的欄位
-    return p.description?.includes(selectedRoast);
+    return p.roast === selectedRoast;
   });
 
   // 切換焙度時重置選擇

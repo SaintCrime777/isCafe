@@ -101,7 +101,7 @@ function SplashScreen({ onComplete }) {
               <img
                 src="/in.webp"
                 alt="Hero"
-                className="w-full h-full object-cover"
+                className="w-full h-full sm:object-cover md:object-contain lg:object-contain"
               />
               <motion.div
                 initial={{ opacity: 0, y: 30 }}

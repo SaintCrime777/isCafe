@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import DrinkCard from "./DrinkCard";
 import { useCartStore } from "@/stores/useCartStore";
-import { useSwipeable } from 'react-swipeable';  //mobile左右滑
+import { useSwipeable } from "react-swipeable"; //mobile左右滑
 
 function Coffee() {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -46,7 +46,7 @@ function Coffee() {
       setIsMobile(width < 640);
 
       if (width < 640) {
-        setCardOffset(0);  //中間card
+        setCardOffset(0); //中間card
       } else if (width < 1024) {
         setCardOffset(300);
       } else {
@@ -70,11 +70,11 @@ function Coffee() {
 
   // ✅ 左右滑
   const handlers = useSwipeable({
-    onSwipedLeft: () => handleNext(),   
-    onSwipedRight: () => handlePrev(),  
+    onSwipedLeft: () => handleNext(),
+    onSwipedRight: () => handlePrev(),
     preventScrollOnSwipe: true,
-    trackMouse: true,  
-    delta: 50,  // 滑動距離至少50px才會觸發
+    trackMouse: true,
+    delta: 50, // 滑動距離至少50px才會觸發
   });
 
   const getVisibleProducts = () => {
@@ -139,7 +139,7 @@ function Coffee() {
     <section
       id="coffee"
       className="relative w-full bg-[#FFF0DD] py-20 overflow-x-hidden scroll-mt-[100px]"
-      {...handlers} 
+      {...handlers}
     >
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-5">
         {/* 標題區 */}
@@ -173,14 +173,14 @@ function Coffee() {
           <button
             onClick={handlePrev}
             className={`absolute left-0 z-20 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors
-              ${isMobile ? 'w-12 h-12 -left-1' : 'w-16 h-16'}
+              ${isMobile ? "w-12 h-12 -left-1" : "w-16 h-16"}
             `}
             style={{
               border: "3px solid #5A3211",
             }}
           >
             <svg
-              className={isMobile ? 'w-6 h-6' : 'w-8 h-8'}
+              className={isMobile ? "w-6 h-6" : "w-8 h-8"}
               fill="none"
               stroke="#5A3211"
               strokeWidth="3"
@@ -194,7 +194,7 @@ function Coffee() {
           <div
             className="relative w-full max-w-[1000px] mx-auto"
             style={{
-              height: isMobile ? "600px" : "700px",  
+              height: isMobile ? "600px" : "700px",
               minHeight: isMobile ? "500px" : "600px",
             }}
           >
@@ -207,15 +207,19 @@ function Coffee() {
                     product.position
                   )}px)`,
                   transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-                  opacity: product.position === "center" ? 1 : (isMobile ? 0 : 0.7),  
+                  opacity:
+                    product.position === "center" ? 1 : isMobile ? 0 : 0.7,
                   zIndex: product.position === "center" ? 10 : 5,
-                  visibility: isMobile && product.position !== "center" ? "hidden" : "visible", 
+                  visibility:
+                    isMobile && product.position !== "center"
+                      ? "hidden"
+                      : "visible",
                 }}
               >
                 <DrinkCard
                   product={product}
                   isCenter={product.position === "center"}
-                  isMobile={isMobile}  
+                  isMobile={isMobile}
                 />
               </div>
             ))}
@@ -225,14 +229,14 @@ function Coffee() {
           <button
             onClick={handleNext}
             className={`absolute right-0 z-20 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors
-              ${isMobile ? 'w-12 h-12 -right-1' : 'w-16 h-16'}
+              ${isMobile ? "w-12 h-12 -right-1" : "w-16 h-16"}
             `}
             style={{
               border: "3px solid #5A3211",
             }}
           >
             <svg
-              className={isMobile ? 'w-6 h-6' : 'w-8 h-8'}
+              className={isMobile ? "w-6 h-6" : "w-8 h-8"}
               fill="none"
               stroke="#5A3211"
               strokeWidth="3"
@@ -243,68 +247,67 @@ function Coffee() {
           </button>
         </div>
 
-        {/* ✅ 11. 手機板指示器 */}
+        {/* 指示器 */}
         {isMobile && (
-          <div className="flex justify-center gap-2 mt-8 mb-6">
+          <div className="flex justify-center gap-2 mt-8 mb-6 relative z-10">
             {products.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`h-2.5 rounded-full transition-all ${
-                  idx === currentIndex 
-                    ? 'bg-[#5A3211] w-8' 
-                    : 'bg-gray-300 w-2.5'
+                  idx === currentIndex
+                    ? "bg-[#5A3211] w-8"
+                    : "bg-gray-300 w-2.5"
                 }`}
               />
             ))}
           </div>
         )}
+      </div>
 
-        {/* 加入清單按鈕 */}
-        <div className="flex justify-center mt-12">
-          <button
-            onClick={() => {
-              const currentProduct = products[currentIndex];
-
-              addItem({
-                id: currentProduct.id,
-                name: currentProduct.name,
-                price: currentProduct.price,
-                image_url: currentProduct.image_url,
-                description: currentProduct.description || "",
-                quantity: 1,
-              });
-
-              alert(`${currentProduct.name} 已加入購物車！`);
-            }}
-            className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity"
-            style={{
-              backgroundColor: "#5A3211",
-              fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: isMobile ? "18px" : "20px",  
-              letterSpacing: "0.1em",
-              border: "2px solid #FFFFFF",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            加入清單
-          </button>
-        </div>
+      {/* 加入清單按鈕 */}
+      <div className="flex justify-center mt-6 mb-12">
+        <button
+          onClick={() => {
+            const currentProduct = products[currentIndex];
+            addItem({
+              id: currentProduct.id,
+              name: currentProduct.name,
+              price: currentProduct.price,
+              image_url: currentProduct.image_url,
+              description: currentProduct.description || "",
+              quantity: 1,
+            });
+            alert(`${currentProduct.name} 已加入購物車！`);
+          }}
+          className="px-12 py-3 text-white font-bold rounded-full hover:opacity-90 transition-opacity relative z-10"
+          style={{
+            backgroundColor: "#5A3211",
+            fontFamily: "'Zen Maru Gothic', sans-serif",
+            fontSize: isMobile ? "18px" : "20px",
+            letterSpacing: "0.1em",
+            border: "2px solid #FFFFFF",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          加入清單
+        </button>
       </div>
 
       {/* 底圖 */}
       <div
         className="absolute bottom-0 left-0 w-full pointer-events-none"
-        style={{ 
-          zIndex: 5,
-          bottom:isMobile?'70px':'0'
-         }}
+        style={{ zIndex: 5 }}
       >
-        <div className="max-w-[1400px] mx-auto">
+        <div className={isMobile ? "w-full" : "max-w-[1400px] mx-auto"}>
           <img
             src="/cut.webp"
             alt="底圖"
-            className="w-full h-auto object-cover"
+            className="w-full object-cover"
+            style={{
+              height: isMobile ? "540px" : "auto",
+              objectPosition: "bottom",
+            }}
           />
         </div>
       </div>

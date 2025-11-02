@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import DrinkCard from "./DrinkCard";
 import { useCartStore } from "@/stores/useCartStore";
+import { useSwipeable } from 'react-swipeable';  //mobile左右滑
 
 function Coffee() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [cardOffset, setCardOffset] = useState(400);
-  const [products, setProducts] = useState([]); // ✅ 改成動態資料
-  const [loading, setLoading] = useState(true); // ✅ 加上 loading
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
   // ✅ 從 Supabase 抓取咖啡商品
@@ -16,19 +18,19 @@ function Coffee() {
     const fetchCoffee = async () => {
       try {
         const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('category', 'coffee')  // ✅ 只抓咖啡類
-          .order('created_at', { ascending: true });
+          .from("products")
+          .select("*")
+          .eq("category", "coffee")
+          .order("created_at", { ascending: true });
 
         if (error) {
-          console.error('❌ 抓取咖啡商品失敗:', error);
+          console.error("❌ 抓取咖啡商品失敗:", error);
         } else {
-          console.log('✅ 從 Supabase 抓到的咖啡:', data);
+          console.log("✅ 從 Supabase 抓到的咖啡:", data);
           setProducts(data || []);
         }
       } catch (error) {
-        console.error('❌ 發生錯誤:', error);
+        console.error("❌ 發生錯誤:", error);
       } finally {
         setLoading(false);
       }
@@ -37,12 +39,14 @@ function Coffee() {
     fetchCoffee();
   }, []);
 
-  // 響應式調整卡片間距
+  // ✅ 2. 修正RWD-mobile
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
+      setIsMobile(width < 640);
+
       if (width < 640) {
-        setCardOffset(200);
+        setCardOffset(0);  //中間card
       } else if (width < 1024) {
         setCardOffset(300);
       } else {
@@ -56,17 +60,26 @@ function Coffee() {
   }, []);
 
   // 修正後的邏輯（左右互換）
-  const handlePrev = () => {
+  const handleNext = () => {
     setCurrentIndex((prev) => (prev < products.length - 1 ? prev + 1 : 0));
   };
 
-  const handleNext = () => {
+  const handlePrev = () => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : products.length - 1));
   };
 
+  // ✅ 左右滑
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleNext(),   
+    onSwipedRight: () => handlePrev(),  
+    preventScrollOnSwipe: true,
+    trackMouse: true,  
+    delta: 50,  // 滑動距離至少50px才會觸發
+  });
+
   const getVisibleProducts = () => {
     if (products.length === 0) return [];
-    
+
     const prevIndex =
       currentIndex === 0 ? products.length - 1 : currentIndex - 1;
     const nextIndex =
@@ -126,6 +139,7 @@ function Coffee() {
     <section
       id="coffee"
       className="relative w-full bg-[#FFF0DD] py-20 overflow-x-hidden scroll-mt-[100px]"
+      {...handlers} 
     >
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-5">
         {/* 標題區 */}
@@ -155,16 +169,18 @@ function Coffee() {
 
         {/* 產品卡片區 */}
         <div className="relative flex items-center justify-center">
-          {/* 左箭頭 */}
+          {/* ✅ 5. 左箭頭 - 縮小 */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 z-20 w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+            className={`absolute left-0 z-20 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors
+              ${isMobile ? 'w-12 h-12 -left-1' : 'w-16 h-16'}
+            `}
             style={{
               border: "3px solid #5A3211",
             }}
           >
             <svg
-              className="w-8 h-8"
+              className={isMobile ? 'w-6 h-6' : 'w-8 h-8'}
               fill="none"
               stroke="#5A3211"
               strokeWidth="3"
@@ -178,8 +194,8 @@ function Coffee() {
           <div
             className="relative w-full max-w-[1000px] mx-auto"
             style={{
-              height: "700px",
-              minHeight: "600px",
+              height: isMobile ? "600px" : "700px",  
+              minHeight: isMobile ? "500px" : "600px",
             }}
           >
             {visibleProducts.map((product) => (
@@ -191,28 +207,32 @@ function Coffee() {
                     product.position
                   )}px)`,
                   transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-                  opacity: product.position === "center" ? 1 : 0.7,
+                  opacity: product.position === "center" ? 1 : (isMobile ? 0 : 0.7),  
                   zIndex: product.position === "center" ? 10 : 5,
+                  visibility: isMobile && product.position !== "center" ? "hidden" : "visible", 
                 }}
               >
                 <DrinkCard
-                  product={product}  // ✅ 直接傳整個 product
+                  product={product}
                   isCenter={product.position === "center"}
+                  isMobile={isMobile}  
                 />
               </div>
             ))}
           </div>
 
-          {/* 右箭頭 */}
+          {/* ✅ 10. 右箭頭 - 缩小 */}
           <button
             onClick={handleNext}
-            className="absolute right-0 z-20 w-16 h-16 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+            className={`absolute right-0 z-20 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors
+              ${isMobile ? 'w-12 h-12 -right-1' : 'w-16 h-16'}
+            `}
             style={{
               border: "3px solid #5A3211",
             }}
           >
             <svg
-              className="w-8 h-8"
+              className={isMobile ? 'w-6 h-6' : 'w-8 h-8'}
               fill="none"
               stroke="#5A3211"
               strokeWidth="3"
@@ -223,19 +243,35 @@ function Coffee() {
           </button>
         </div>
 
+        {/* ✅ 11. 手機板指示器 */}
+        {isMobile && (
+          <div className="flex justify-center gap-2 mt-8 mb-6">
+            {products.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-2.5 rounded-full transition-all ${
+                  idx === currentIndex 
+                    ? 'bg-[#5A3211] w-8' 
+                    : 'bg-gray-300 w-2.5'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
         {/* 加入清單按鈕 */}
         <div className="flex justify-center mt-12">
           <button
             onClick={() => {
               const currentProduct = products[currentIndex];
-              
-              // ✅ 使用正確的欄位名稱
+
               addItem({
-                id: currentProduct.id,  // ✅ 直接用 UUID
-                name: currentProduct.name,  // ✅ 不是 title
-                price: currentProduct.price,  // ✅ 已經是數字
-                image_url: currentProduct.image_url,  // ✅ 不是 image
-                description: currentProduct.description || '',
+                id: currentProduct.id,
+                name: currentProduct.name,
+                price: currentProduct.price,
+                image_url: currentProduct.image_url,
+                description: currentProduct.description || "",
                 quantity: 1,
               });
 
@@ -245,7 +281,7 @@ function Coffee() {
             style={{
               backgroundColor: "#5A3211",
               fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: "20px",
+              fontSize: isMobile ? "18px" : "20px",  
               letterSpacing: "0.1em",
               border: "2px solid #FFFFFF",
               boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",

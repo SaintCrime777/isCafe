@@ -1,8 +1,8 @@
 // src/components/DrinkCard.jsx
-function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
-  const cardWidth = isCenter ? 320 : 260;
-  const cardHeight = isCenter ? 680 : 580;
-  const scale = isCenter ? 1 : 0.81;
+function DrinkCard({ product, isCenter, isMobile }) {  // ✅ 接收 isMobile prop
+  const cardWidth = isMobile ? 280 : (isCenter ? 320 : 260);
+  const cardHeight = isMobile ? 580 : (isCenter ? 680 : 580);  
+  const scale = isCenter ? 1 : 0.85;  
 
   return (
     <div 
@@ -20,7 +20,7 @@ function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
           style={{
             width: `${cardWidth}px`,
             height: `${cardHeight}px`,
-            borderRadius: '80px',
+            borderRadius: isMobile ? '60px' : '80px',  // ✅ 4. 手机版圆角小一点
             backgroundColor: '#D9D9D9',
             top: '-16px',
             right: '-16px',
@@ -35,14 +35,14 @@ function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
         style={{
           width: `${cardWidth}px`,
           height: `${cardHeight}px`,
-          borderRadius: '80px',
+          borderRadius: isMobile ? '60px' : '80px',  
           border: '5px solid #5A3211',
           boxShadow: '10px -5px 15px rgba(0, 0, 0, 0.15)',
           zIndex: 1
         }}
       >
         {/* 圖片區域 */}
-        <div className="relative w-full pt-16 px-4">
+        <div className={`relative w-full px-4 ${isMobile ? 'pt-12' : 'pt-16'}`}> 
           <div
             className="w-full overflow-hidden"
             style={{
@@ -52,9 +52,10 @@ function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
             }}
           >
             <img
-              src={product.image_url}  
-              alt={product.name}  
+              src={product.image_url}
+              alt={product.name}
               className="w-full h-full object-cover"
+              loading="lazy" //lazyloading
               onError={(e) => {
                 e.target.src = 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop';
               }}
@@ -79,13 +80,13 @@ function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
             className="font-bold text-center mb-3"
             style={{
               fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: `${isCenter ? '32px' : '26px'}`,
+              fontSize: isMobile ? '24px' : (isCenter ? '32px' : '26px'),  
               color: '#5A3211',
               letterSpacing: '0.2em',
               textShadow: '2px 2px 0px #FFFFFF, -2px -2px 0px #FFFFFF, 2px -2px 0px #FFFFFF, -2px 2px 0px #FFFFFF'
             }}
           >
-            {product.name}  {/* ✅ 改用 name */}
+            {product.name}
           </h3>
 
           {/* 價格 */}
@@ -93,13 +94,13 @@ function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
             className="font-medium mb-4"
             style={{
               fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: `${isCenter ? '28px' : '24px'}`,
+              fontSize: isMobile ? '22px' : (isCenter ? '28px' : '24px'),  // ✅ 9. 手机版字体调整
               color: '#000000',
               letterSpacing: '0.2em',
               fontStyle: 'italic'
             }}
           >
-            {product.price}  {/* ✅ 改用 price（已經是數字） */}
+            {product.price}
           </p>
 
           {/* 下方分隔線 */}
@@ -118,12 +119,12 @@ function DrinkCard({ product, isCenter }) {  // ✅ 改成接收 product 物件
               className="font-bold"
               style={{
                 fontFamily: "'Zen Maru Gothic', sans-serif",
-                fontSize: `${isCenter ? '16px' : '14px'}`,
+                fontSize: isMobile ? '14px' : (isCenter ? '16px' : '14px'), 
                 color: '#000000',
                 letterSpacing: '0.2em'
               }}
             >
-              {product.description}  {/* ✅ 改用 description */}
+              {product.description}
             </p>
           </div>
         </div>

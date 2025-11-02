@@ -21,12 +21,13 @@ function Secone() {
         
         {/* 文字 */}
         <h1 
-          className="relative z-10 font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl 
-                     text-center px-6 leading-tight"
+          className="relative z-10 font-bold text-2xl md:text-4xl lg:text-5xl 
+                     text-center px-6"
           style={{
             fontFamily: "'Zen Maru Gothic', sans-serif",
             color: '#5A3211',
             letterSpacing: '0.02em',
+            lineHeight: "1.5",
             WebkitTextStroke: '3px #F4F0F0',
             paintOrder: 'stroke fill'
           }}

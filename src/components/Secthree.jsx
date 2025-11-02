@@ -19,7 +19,7 @@ function Secthree() {
         }}
       >
         <img
-          src="/advantage.png"
+          src="/advantage.webp"
           alt="優勢"
           className="w-full h-full rounded-xl"
         />

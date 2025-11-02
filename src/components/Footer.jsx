@@ -1,73 +1,80 @@
-import { FaFacebook } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa6";
-import { FaXTwitter } from "react-icons/fa6";
-import { FaYoutube } from "react-icons/fa";
+// src/components/Footer.jsx
+import { FaFacebook, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
+
 function Footer() {
   return (
     <footer className="w-full bg-[#D9D9D9]">
-      <div className="max-w-[1440px] h-[512px] mx-auto px-5 lg:px-12 flex flex-col justify-between py-12">
+      {/* RWD自適應 */}
+      <div className="max-w-[1440px] mx-auto px-5 lg:px-12 flex flex-col justify-between py-8 lg:py-12">
         
         {/* 上方 - 社群圖示 */}
-        <div className="flex gap-8">
+        <div className="flex gap-6 lg:gap-8 justify-center lg:justify-start">
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <FaFacebook alt="Facebook" style={{color: '#5A3211'}} className="w-8 h-8"/>
+            <FaFacebook className="w-7 h-7 lg:w-8 lg:h-8" style={{color: '#5A3211'}} />
           </a>
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-            <FaInstagram alt="Instagram" className="w-8 h-8" style={{color: '#5A3211'}} />
+            <FaInstagram className="w-7 h-7 lg:w-8 lg:h-8" style={{color: '#5A3211'}} />
           </a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <FaXTwitter alt="X (Twitter)" className="w-8 h-8" style={{color: '#5A3211'}} />
+            <FaXTwitter className="w-7 h-7 lg:w-8 lg:h-8" style={{color: '#5A3211'}} />
           </a>
           <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
-            <FaYoutube alt="YouTube" className="w-8 h-8" style={{color: '#5A3211'}} />
+            <FaYoutube className="w-7 h-7 lg:w-8 lg:h-8" style={{color: '#5A3211'}} />
           </a>
         </div>
-{/* 分隔線 */}
-    <div className="w-full h-[4px] bg-white mt-2" />
-        {/* 中段 */}
-        <div className="flex items-center justify-between gap-12 flex-1">
-          {/* 左側 - 公司資訊 */}
-          <div 
-            className="space-y-2"
-            style={{
-              fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: '20px',
-              lineHeight: '1.5',
-              letterSpacing: '0.2em',
-              color: '#000000'
-            }}
-          >
-            <p>是個咖有限公司</p>
-            <p>聯繫信箱｜iscafe@mail.com</p>
-            <p>統一編號｜87654321</p>
-            <p>營業時間｜週一至週五10:00-18:00</p>
-            <p>公司地址｜台北市市府路1號1樓</p>
-          </div>
 
-          {/* 右側 - Logo */}
-          <div className="w-80 h-80 flex items-center justify-center">
+        {/* 分隔線 */}
+        <div className="w-full h-[3px] lg:h-[4px] bg-white mt-4 lg:mt-2" />
+        
+        {/* ✅ 中段  */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-12 flex-1 my-6 lg:my-0">
+          
+          {/* mobile-LOGO先行 */}
+          <div className="w-64 h-64 lg:w-80 lg:h-80 flex items-center justify-center order-1 lg:order-2">
             <img 
               src="/logo.png" 
               alt="笑忘咖啡 Logo" 
               className="w-full h-full object-contain"
             />
           </div>
-        </div>
 
-        {/* 下段 - 連結與版權 */}
-        <div className="space-y-2">
-          {/* 連結列 */}
+          {/* ✅ 左側 - 公司資訊 */}
           <div 
-            className="text-center"
+            className="space-y-1 lg:space-y-2 text-center lg:text-left order-2 lg:order-1"
             style={{
               fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: '14px',
-              lineHeight: 'auto',
-              letterSpacing: '0.2em',
+              fontSize: 'clamp(14px, 3.5vw, 20px)',  
+              lineHeight: '1.6',
+              letterSpacing: '0.1em',
               color: '#000000'
             }}
           >
-            網站地圖｜個人資料保護政策｜聯絡我們:02-23456789(週一至週六9:30~17:30)
+            <p className="font-semibold">是個咖有限公司</p>
+            <p className="text-sm lg:text-base">聯繫信箱｜iscafe@mail.com</p>
+            <p className="text-sm lg:text-base">統一編號｜87654321</p>
+            <p className="text-sm lg:text-base">營業時間｜週一至週五10:00-18:00</p>
+            <p className="text-sm lg:text-base">公司地址｜台北市市府路1號1樓</p>
+          </div>
+        </div>
+
+        {/* ✅ 下段 - 連結與版權 */}
+        <div className="space-y-3 lg:space-y-2 mt-6 lg:mt-0">
+          {/*  mobile - 換行 */}
+          <div 
+            className="text-center flex flex-col lg:flex-row lg:justify-center gap-1 lg:gap-0"
+            style={{
+              fontFamily: "'Zen Maru Gothic', sans-serif",
+              fontSize: 'clamp(11px, 2.5vw, 14px)',  
+              lineHeight: '1.5',
+              letterSpacing: '0.1em',
+              color: '#000000'
+            }}
+          >
+            {/* mobile分行 */}
+            <span className="block lg:inline">網站地圖｜個人資料保護政策</span>
+            <span className="hidden lg:inline">｜</span>
+            <span className="block lg:inline">聯絡我們:02-23456789</span>
+            <span className="block lg:inline text-xs lg:text-sm">(週一至週六9:30~17:30)</span>
           </div>
 
           {/* Copyright */}
@@ -75,9 +82,9 @@ function Footer() {
             className="text-center"
             style={{
               fontFamily: "'Zen Maru Gothic', sans-serif",
-              fontSize: '12px',
-              lineHeight: 'auto',
-              letterSpacing: '0.2em',
+              fontSize: 'clamp(10px, 2vw, 12px)',  
+              lineHeight: '1.5',
+              letterSpacing: '0.15em',
               color: '#000000'
             }}
           >

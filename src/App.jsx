@@ -1,4 +1,4 @@
-import { useState,useEffect  } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Coffee from "./components/Coffee";
@@ -6,11 +6,27 @@ import Dessert from "./components/Dessert";
 import Bean from "./components/Bean";
 import Footer from "./components/Footer";
 import { Toaster } from "sonner";
-import { supabase } from '@/lib/supabase'; // ✅ 確認你的路徑
-import { useAuthStore } from '@/stores/useAuthStore'; // ✅ 加這行
+import { supabase } from "@/lib/supabase"; // ✅ 確認你的路徑
+import { useAuthStore } from "@/stores/useAuthStore"; // ✅ 加這行
+import SplashScreen from "./components/SplashScreen";
 
 function App() {
-    // ✅ 加這段：監聽 Supabase 登入狀態
+  const [showSplash, setShowSplash] = useState(true); // ✅ 控制開場
+
+  // 只在第一次顯示
+  // useEffect(() => {
+  //   const hasVisited = sessionStorage.getItem("hasVisited");
+  //   if (hasVisited) {
+  //     setShowSplash(false);
+  //   }
+  // }, []);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    sessionStorage.setItem("hasVisited", "true"); // ✅ 紀錄訪問
+  };
+
+  // ✅ 加這段：監聽 Supabase 登入狀態
   useEffect(() => {
     // 初始化：檢查當前登入狀態
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -51,11 +67,10 @@ function App() {
       subscription.unsubscribe();
     };
   }, []);
- 
-
 
   return (
     <>
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       <Toaster position="top-center" richColors />
       <Navbar />
       <Hero />

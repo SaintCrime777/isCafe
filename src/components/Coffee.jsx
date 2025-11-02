@@ -221,7 +221,7 @@ function Coffee() {
             ))}
           </div>
 
-          {/* ✅ 10. 右箭頭 - 缩小 */}
+          {/* ✅ 10. 右箭頭 - 縮小 */}
           <button
             onClick={handleNext}
             className={`absolute right-0 z-20 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors
@@ -295,7 +295,10 @@ function Coffee() {
       {/* 底圖 */}
       <div
         className="absolute bottom-0 left-0 w-full pointer-events-none"
-        style={{ zIndex: 5 }}
+        style={{ 
+          zIndex: 5,
+          bottom:isMobile?'70px':'0'
+         }}
       >
         <div className="max-w-[1400px] mx-auto">
           <img

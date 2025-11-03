@@ -13,13 +13,13 @@ import SplashScreen from "./components/SplashScreen";
 function App() {
   const [showSplash, setShowSplash] = useState(true); // ✅ 控制開場
 
-  // 只在第一次顯示
-  // useEffect(() => {
-  //   const hasVisited = sessionStorage.getItem("hasVisited");
-  //   if (hasVisited) {
-  //     setShowSplash(false);
-  //   }
-  // }, []);
+  只在第一次顯示
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("hasVisited");
+    if (hasVisited) {
+      setShowSplash(false);
+    }
+  }, []);
 
   const handleSplashComplete = () => {
     setShowSplash(false);

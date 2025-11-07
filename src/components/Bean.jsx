@@ -25,7 +25,7 @@ function Bean() {
         if (error) {
           console.error('❌ 抓取咖啡豆商品失敗:', error);
         } else {
-          console.log('✅ 從 Supabase 抓到的咖啡豆:', data);
+          // console.log('✅ 從 Supabase 抓到的咖啡豆:', data);
           setProducts(data || []);
         }
       } catch (error) {

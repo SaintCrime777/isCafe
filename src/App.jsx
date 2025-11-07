@@ -44,7 +44,7 @@ function App() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("🔐 Auth 狀態變化:", event, session?.user); // 除錯用
+      // 除錯用console.log("🔐 Auth 狀態變化:", event, session?.user); 
 
       if (session?.user) {
         // 登入成功：存到 Zustand

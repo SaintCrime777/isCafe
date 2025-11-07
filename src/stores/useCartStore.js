@@ -72,14 +72,14 @@ export const useCartStore = create(
       // ✅ 建立訂單（修正版）
       createOrder: async (orderData) => {
         try {
-          console.log('🚀 createOrder 被呼叫了！');
+          //console.log('🚀 createOrder 被呼叫了！');
           
           const items = get().items;
           const total = get().getTotal();
 
-          console.log('📦 orderData:', orderData);
-          console.log('🛒 購物車內容:', items);
-          console.log('💰 總金額:', total);
+          //console.log('📦 orderData:', orderData);
+          //console.log('🛒 購物車內容:', items);
+          //console.log('💰 總金額:', total);
 
           // 1️⃣ 檢查是否有商品
           if (items.length === 0) {
@@ -92,7 +92,7 @@ export const useCartStore = create(
             throw new Error('請先登入');
           }
 
-          console.log('👤 用戶資料:', user);
+          //console.log('👤 用戶資料:', user);
 
           // 3️⃣ 生成訂單編號
           const orderNumber = `${Date.now()}`;
@@ -122,7 +122,7 @@ export const useCartStore = create(
             throw orderError;
           }
 
-          console.log('✅ 訂單建立成功:', order);
+          //console.log('✅ 訂單建立成功:', order);
 
           // 5️⃣ 建立訂單項目
           const orderItems = items.map(item => ({
@@ -143,7 +143,7 @@ export const useCartStore = create(
             throw itemsError;
           }
 
-          console.log('✅ 訂單項目建立成功');
+          //console.log('✅ 訂單項目建立成功');
 
           // 6️⃣ 清空購物車
           get().clearCart();

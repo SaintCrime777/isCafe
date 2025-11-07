@@ -55,10 +55,10 @@ export default function CartDrawer() {
   // ✅ 送出訂單的函數（修正版）
   const handleSubmitOrder = async () => {
     try {
-      console.log('🚀 開始建立訂單...');
-      console.log('📦 訂單資料:', orderData);
-      console.log('🛒 購物車商品:', items);
-      console.log('👤 用戶資料:', user);
+      //console.log('🚀 開始建立訂單...');
+      //console.log('📦 訂單資料:', orderData);
+      //console.log('🛒 購物車商品:', items);
+      //console.log('👤 用戶資料:', user);
 
       // ✅ 真正呼叫 createOrder
       const result = await createOrder({
@@ -71,7 +71,7 @@ export default function CartDrawer() {
         notes: orderData.notes,
       });
 
-      console.log('📊 建立訂單結果:', result);
+      //console.log('📊 建立訂單結果:', result);
 
       if (result.success) {
         setOrderNumber(result.orderNumber);

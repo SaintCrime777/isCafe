@@ -20,7 +20,7 @@ function Sectwo() {
         if (error) {
           console.error('❌ 抓取商品失敗:', error);
         } else {
-          console.log('✅ 從 Supabase 抓到的商品:', data);
+          // console.log('✅ 從 Supabase 抓到的商品:', data);
           setProducts(data || []);
         }
       } catch (error) {

@@ -26,7 +26,7 @@ function Dessert() {
         if (error) {
           console.error("❌ 抓取甜點商品失敗:", error);
         } else {
-          console.log("✅ 從 Supabase 抓到的甜點:", data);
+          // console.log("✅ 從 Supabase 抓到的甜點:", data);
           setProducts(data || []);
         }
       } catch (error) {

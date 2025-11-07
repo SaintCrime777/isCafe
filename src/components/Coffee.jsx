@@ -26,7 +26,7 @@ function Coffee() {
         if (error) {
           console.error("❌ 抓取咖啡商品失敗:", error);
         } else {
-          console.log("✅ 從 Supabase 抓到的咖啡:", data);
+          // console.log("✅ 從 Supabase 抓到的咖啡:", data);
           setProducts(data || []);
         }
       } catch (error) {

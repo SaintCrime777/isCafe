@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Search, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useCartStore } from "@/stores/useCartStore";
+import { toast } from "sonner";
 
 export default function SearchDrawer() {
   const addItem = useCartStore((s) => s.addItem);
@@ -135,22 +136,11 @@ export default function SearchDrawer() {
                           description: p.description || "",
                           quantity: 1,
                         });
+                        toast.success(`已加入購物車!`, { id: "cart-toast",duration: 1000 });
                       }}
                       className="px-3 py-1 rounded-full bg-[#5A3211] text-white text-sm hover:opacity-90"
                     >
                       加入清單
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        const map = { coffee: "#coffee", dessert: "#dessert", bean: "#bean" };
-                        const target = map[p.category] || "#coffee";
-                        setIsOpen(false);
-                        document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="px-3 py-1 rounded-full border text-sm hover:bg-black/5"
-                    >
-                      看商品區
                     </button>
                   </div>
                 </div>

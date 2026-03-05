@@ -13,14 +13,15 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { LogIn, LogOut, User } from "lucide-react";
 import MemberDrawer from "./Cart/MemberDrawer";
+import SearchDrawer from "./Search/SearchDrawer";
 
 function Navbar() {
   //OAuth
   const { user, loading, signInWithGoogle, signOut } = useAuth();
-  
+
   // 選單相關 state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // 搜尋相關 state
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,41 +118,8 @@ function Navbar() {
           {/* 按鈕組 */}
           <div className="flex items-center gap-2 sm:gap-4 mt-2">
             {/* 搜尋 - 桌面版 */}
-            <div className="hidden sm:block relative" ref={searchInputRef}>
-              {isSearchOpen && (
-                <div className="absolute right-0 top-0 flex items-center gap-2 bg-white border-2 border-gray-300 rounded-lg px-4 py-2 shadow-lg animate-in slide-in-from-right duration-200 z-50">
-                  <Search className="h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="搜尋商品..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch}
-                    className="w-32 lg:w-36 outline-none text-gray-700 placeholder:text-gray-400"
-                    autoFocus
-                  />
-                  <button
-                    onClick={() => {
-                      setIsSearchOpen(false);
-                      setSearchQuery("");
-                    }}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label="關閉搜尋"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              )}
-
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                className={`w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors ${
-                  isSearchOpen ? "invisible" : "visible"
-                }`}
-                aria-label="搜尋"
-              >
-                <Search className="h-6 w-6 lg:h-8 lg:w-8" />
-              </button>
+            <div className="hidden sm:block">
+              <SearchDrawer />
             </div>
 
             {/* 購物車 */}
@@ -264,22 +232,7 @@ function Navbar() {
 
               {/* 搜尋框 - 移動版 */}
               <div className="sm:hidden">
-                <div className="flex items-center gap-2 bg-white border-2 border-gray-300 rounded-lg px-4 py-3">
-                  <Search className="h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="搜尋商品..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => {
-                      handleSearch(e);
-                      if (e.key === "Enter") {
-                        handleNavClick();
-                      }
-                    }}
-                    className="flex-1 outline-none text-gray-700 placeholder:text-gray-400"
-                  />
-                </div>
+                <SearchDrawer />
               </div>
 
               {/* 登入/登出區域 - 移動版 */}

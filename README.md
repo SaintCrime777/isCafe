@@ -42,6 +42,5 @@ src/
 
 🔑 Technical Highlights
 Supabase 全端整合：單一 BaaS 同時處理 Auth、Database、Storage，減少後端基礎建設成本
-Zustand 狀態管理：購物車狀態跨元件共享，避免 prop drilling
+Zustand 狀態管理：選擇 Zustand 而非 Context API，避免不必要的 re-render，購物車操作響應更流暢
 手勢支援：整合 react-swipeable 提升行動端瀏覽體驗
-React 19：採用最新穩定版，使用新版 hooks 與效能優化

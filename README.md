@@ -43,11 +43,15 @@ Browser
 ```
 📁 Project Structure
 src/
-├── components/       # 可複用 UI 元件
-├── pages/            # 各頁面（Menu, Cart, Orders, Auth）
-├── store/            # Zustand stores
+├── components/
+│   ├── Auth/         # 登入 Modal
+│   ├── Cart/         # 購物車、訂單、會員功能
+│   ├── Search/       # 搜尋抽屜
+│   └── ui/           # 可複用 UI 元件（Button, Dialog...）
+├── hooks/            # 自定義 Hook（useAuth）
+├── stores/           # Zustand 狀態管理（Auth, Cart）
 ├── lib/              # Supabase client 初始化
-└── assets/           # 靜態資源
+└── utils/            # 工具函式
 ```
 ```
 🔑 Technical Highlights

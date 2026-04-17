@@ -72,7 +72,7 @@ function Coffee() {
   const handlers = useSwipeable({
     onSwipedLeft: () => handleNext(),
     onSwipedRight: () => handlePrev(),
-    preventScrollOnSwipe: true,
+    preventScrollOnSwipe: true,//防止揆手
     trackMouse: true,
     delta: 50, // 滑動距離至少50px才會觸發
   });

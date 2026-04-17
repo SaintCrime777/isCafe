@@ -56,5 +56,6 @@ Zustand 狀態管理：選擇 Zustand 而非 Context API，避免不必要的 re
 手勢支援：整合 react-swipeable 提升行動端瀏覽體驗
 ```
 效能優化:
-<img width="961" height="395" alt="image" src="https://github.com/user-attachments/assets/45c07033-ec59-465b-86e1-2221ec3b3375" />
+<img width="1053" height="612" alt="image" src="https://github.com/user-attachments/assets/b05374bc-09e3-4f03-92b6-a86a094e3d91" />
+
 

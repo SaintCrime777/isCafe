@@ -1,14 +1,19 @@
-【isCafe ☕】
-咖啡廳點餐與訂單管理系統｜A café ordering & order management web app
+# 【isCafe ☕】
+## 咖啡廳點餐與訂單管理系統｜A café ordering & order management web app
+
 ### Navbar+Hero
 <img width="2532" height="748" alt="image" src="https://github.com/user-attachments/assets/52f7090e-49c0-4caf-914b-d904cbca8f60" />
+
 ### 商品選單
 <img width="2529" height="1152" alt="image" src="https://github.com/user-attachments/assets/6118c25a-5fb2-49a7-9c30-67d370c1bc9b" />
+
 ### 豆子選單
 <img width="2535" height="1155" alt="image" src="https://github.com/user-attachments/assets/53966168-ad49-40ed-9338-9b2c605afda3" />
+
 ### 購物車清單
 <img width="534" height="1267" alt="image" src="https://github.com/user-attachments/assets/cf8b24ed-92b7-4b60-88ad-0c0b4f3b013d" />
 <img width="537" height="1270" alt="image" src="https://github.com/user-attachments/assets/9fb575c4-ca16-4b0b-bcf3-1dca81be53cb" />
+
 ### 歷史訂單
 <img width="496" height="1160" alt="image" src="https://github.com/user-attachments/assets/0c624b00-e36a-46c5-a60c-19fbc1dc93a3" />
 
